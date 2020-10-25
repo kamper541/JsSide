@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blockly Demo: Fixed Blockly</title>
+  <script src="fromGoogle/blockly_compressed.js"></script>
+  <script src="fromGoogle/blocks_compressed.js"></script>
+  <script src="fromGoogle/en.js"></script>
+  <script src="fromGoogle/javascript_compressed.js"></script>
+  <script src="https://unpkg.com/esprima@~4.0/dist/esprima.js"></script>
+  <!-- defined -->
+  <script>
+    Blockly.Blocks['moving_unit'] = {
+    init: function() {
+      this.appendValueInput("Block")
+          .setCheck("Number")
+          .appendField("Moving");
+      this.appendDummyInput()
+          .appendField("Block(s)");
+      this.setInputsInline(true);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(230);
+   this.setTooltip("");
+   this.setHelpUrl("");
+    }
+  };
+
+  Blockly.JavaScript['moving_unit'] = function(block) {
+    var value_block = Blockly.JavaScript.valueToCode(block, 'Block', Blockly.JavaScript.ORDER_ATOMIC);
+    // TODO: Assemble JavaScript into code variable.
+    // var code = Blockly.JavaScript.workspaceToCode(workspace);
+    let val = block.getFieldValue('Block')
+    let id = 'Block'
+    // return [id , value_block]
+    return "Move(" + value_block + ")\n";
+  };
+
+
+</script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+  </style>
+</head>
+<body>
+  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Fixed Blockly</h1>
+
+  <p>This is a simple demo of injecting Blockly into a fixed-sized 'div' element.</p>
+
+  <p>&rarr; More info on <a href="https://developers.google.com/blockly/guides/configure-blockly/web/fixed-size">injecting fixed-sized Blockly</a>&hellip;</p>
+
+  <!-- <p><button id="defined" action="/convert" method="post">Test</button></p> -->
+  <p><button onclick="defined()">Test</button></p>
+
+  <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+    <block type="controls_if"></block>
+    <block type="logic_compare"></block>
+    <block type="controls_repeat_ext"></block>
+    <block type="math_number">
+      <field name="NUM">123</field>
+    </block>
+    <block type="math_arithmetic"></block>
+    <block type="text"></block>
+    <block type="procedures_defnoreturn"></block>
+    <!-- <block type="move"></block> -->
+    <block type="text_print"></block>
+    <block type="moving_unit"></block>
+
+  </xml>
+
+  <!-- <script>
+    var demoWorkspace = Blockly.inject('blocklyDiv',
+        {media: '../../media/',
+         toolbox: document.getElementById('toolbox')});
+  </script> -->
+
+  <script>
+    // Custom requires for the playground.
+    let workspace = null
+    var match = location.search.match(/dir=([^&]+)/);
+    var rtl = match && match[1] == 'rtl';
+    workspace = Blockly.inject('blocklyDiv',
+      {
+        comments: true,
+        collapse: true,
+        disable: true,
+        grid:
+          {
+            spacing: 25,
+            length: 3,
+            colour: '#ccc',
+            snap: true
+          },
+        horizontalLayout: false,
+        maxBlocks: Infinity,
+        maxInstances: {'test_basic_limit_instances': 3},
+        maxTrashcanContents: 256,
+        // media: '../media/',
+        oneBasedIndex: true,
+        readOnly: false,
+        rtl: rtl,
+        move: {
+          scrollbars: true,
+          drag: true,
+          wheel: false,
+        },
+        toolbox: toolbox,
+        toolboxPosition: 'start',
+        renderer: 'geras',
+        zoom:
+          {
+            controls: true,
+            wheel: true,
+            startScale: 1.0,
+            maxScale: 4,
+            minScale: 0.25,
+            scaleSpeed: 1.1
+          }
+      });
+</script>
+<!-- <script src="https://unpkg.com/esprima@~4.0/dist/esprima.js"></script> -->
+  <!-- <script src="index.js"></script> -->
+  <script>
+
+    function defined(){
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+          var code = Blockly.JavaScript.workspaceToCode(workspace);
+      console.log(code)
+      // esprima.parseScript(code)
+      console.log(esprima.parseScript(code))
+    }
+  </script>
+
+  <!-- <script src="index.js"></script> -->
+
+</body>
+</html>
